@@ -12,6 +12,7 @@ jobs:
         run: |
           choco install ninja
       - name: Build native library
+        shell: cmd
         run: |
           call "C:\\Program Files\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\Tools\\VsDevCmd.bat"
           cmake -G "Ninja" -DCMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build-win
