@@ -10,7 +10,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Install prerequisites
         run: |
-          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
           choco install ninja
       - name: Build native library
         run: |
