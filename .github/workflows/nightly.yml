@@ -73,7 +73,7 @@ jobs:
         id: vars
         run: |
           calculatedSha=$(git rev-parse --short ${{ github.sha }})
-          echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+          echo "NIGHTLY_COMMIT=$calculatedSha" >> $GITHUB_ENV
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
