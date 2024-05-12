@@ -15,8 +15,8 @@ jobs:
           java-version: 17
       - name: Install prerequisites
         run: |
-          choco install visualstudio2022community ninja
-      - name: Configure CMake
+          choco install ninja
+      - name: Build native library
         shell: cmake -P {0}
         run: |
           set(ENV{CC} cl)
@@ -45,9 +45,16 @@ jobs:
           if (NOT result EQUAL 0)
             message(FATAL_ERROR "Bad exit status")
           endif()
-      - name: Build native library
-        run: |
-          cmake --build build-win --target MediaPlayerInfo
+          
+          execute_process(
+            COMMAND cmake
+              --build build-win
+              --target MediaPlayerInfo
+            RESULT_VARIABLE result
+          )
+          if (NOT result EQUAL 0)
+            message(FATAL_ERROR "Bad exit status")
+          endif()
       - name: Save native library to cache
         uses: actions/cache/save@v4
         id: cache
