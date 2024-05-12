@@ -15,7 +15,7 @@ jobs:
           java-version: 17
       - name: Install prerequisites
         run: |
-          choco install ninja
+          choco install visualstudio2022community ninja
       - name: Configure CMake
         shell: cmake -P {0}
         run: |
