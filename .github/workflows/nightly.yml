@@ -61,6 +61,7 @@ jobs:
         with:
           path: build-win/MediaPlayerInfo.dll
           key: "native-win-${{ github.sha }}"
+          enableCrossOsArchive: true
   build:
     runs-on: ubuntu-latest
     needs:
@@ -86,6 +87,7 @@ jobs:
         with:
           path: build-win/MediaPlayerInfo.dll
           key: "native-win-${{ github.sha }}"
+          enableCrossOsArchive: true
       - name: Copy dll to resources
         run: cp build-win/MediaPlayerInfo.dll src/main/resources/mediaplayerinfo/natives/win/
       - name: Build with Gradle
