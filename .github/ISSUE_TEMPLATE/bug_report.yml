@@ -1,0 +1,70 @@
+name: Bug
+description: Create a report to help us improve
+title: "[Bug] "
+labels:
+  - bug
+  - needs addressing
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproducing
+    attributes:
+      label: Steps to reproduce the behavior
+      description: |
+        Steps to reproduce the behavior:
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Expected behaviour
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Windows 10
+        - Windows 11
+        - Linux
+        - MacOS
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What versions have this bug?
+      placeholder: 0.1.0-rc1..0.1.0-rc4 or commit hash
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before submitting a bug report
+      options:
+        - label: |
+            This bug wasn't already reported.
+            (I have searched for it on GitHub)
+          required: true
+        - label: |
+            This is a valid bug.
+            (I am able to reproduce this on the latest dev build)
+          required: true
