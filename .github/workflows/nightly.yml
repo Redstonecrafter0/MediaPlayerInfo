@@ -11,10 +11,37 @@ jobs:
       - name: Install prerequisites
         run: |
           choco install ninja
+      - name: Configure CMake
+        shell: cmake -P {0}
+        run: |
+          set(ENV{CC} cl)
+          set(ENV{CXX} cl)
+          
+          execute_process(
+            COMMAND "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat" && set
+            OUTPUT_FILE environment_script_output.txt
+          )
+          file(STRINGS environment_script_output.txt output_lines)
+          foreach(line IN LISTS output_lines)
+            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+          
+          execute_process(
+            COMMAND ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake
+              -S .
+              -B build-win
+              -D CMAKE_BUILD_TYPE=Release
+              -D "CMAKE_SYSTEM_VERSION=10.0.19041.0"
+              -G Ninja
+            RESULT_VARIABLE result
+          )
+          if (NOT result EQUAL 0)
+            message(FATAL_ERROR "Bad exit status")
+          endif()
       - name: Build native library
         run: |
-          "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
-          cmake -G "Ninja" -DCMAKE_SYSTEM_VERSION="10.0.19041.0" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build-win
           cmake --build build-win --target MediaPlayerInfo
       - name: Save native library to cache
         uses: actions/cache/save@v4
