@@ -12,4 +12,8 @@ out/
 !**/src/test/**/out/
 cmake-*
 hs_err_*
-/src/main/resources/mediaplayerinfo/natives/
+/src/main/resources/mediaplayerinfo/natives/**/*.dll
+/src/main/resources/mediaplayerinfo/natives/**/*.so
+/venv
+/docs/index.md
+.cache

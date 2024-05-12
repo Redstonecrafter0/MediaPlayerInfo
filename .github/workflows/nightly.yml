@@ -1,0 +1,57 @@
+on:
+  push:
+    branches:
+      - master
+jobs:
+  native:
+    runs-on: windows-2019
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install prerequisites
+        run: |
+          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+          choco install ninja
+      - name: Build native library
+        run: |
+          cmake -G "Ninja" -DCMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build-win
+          cmake --build build-win --target MediaPlayerInfo
+      - name: Save native library to cache
+        uses: actions/cache/save@v4
+        id: cache
+        with:
+          path: build-win/MediaPlayerInfo.dll
+          key: "native-win-${{ github.sha }}"
+  build:
+    runs-on: ubuntu-latest
+    env:
+      :
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set short git commit SHA
+        id: vars
+        run: |
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Restore native Windows library from cache
+        uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: build-win/MediaPlayerInfo.dll
+          key: "native-win-${{ github.sha }}"
+      - name: Copy dll to resources
+        run: cp build-win/MediaPlayerInfo.dll src/main/resources/mediaplayerinfo/natives/win/
+      - name: Build with Gradle
+        run: ./gradlew clean build dokkaJavaDocJar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: build/libs/*
