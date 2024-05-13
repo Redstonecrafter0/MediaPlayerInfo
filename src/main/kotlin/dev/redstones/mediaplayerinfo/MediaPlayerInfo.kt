@@ -1,6 +1,7 @@
 package dev.redstones.mediaplayerinfo
 
 import dev.redstones.mediaplayerinfo.impl.DummyMediaPlayerInfo
+import dev.redstones.mediaplayerinfo.impl.linux.LinuxMediaPlayerInfo
 import dev.redstones.mediaplayerinfo.impl.win.WindowsMediaPlayerInfo
 
 interface MediaPlayerInfo {
@@ -16,5 +17,6 @@ interface MediaPlayerInfo {
 
 val systemMediaPlayerInfo = when {
     System.getProperty("os.name").lowercase().startsWith("windows") -> WindowsMediaPlayerInfo
+    System.getProperty("os.name").lowercase() == "linux" -> LinuxMediaPlayerInfo
     else -> DummyMediaPlayerInfo
 }

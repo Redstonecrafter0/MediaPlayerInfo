@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.bundles.dbus)
 }
 
 java {

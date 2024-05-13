@@ -1,11 +1,15 @@
 [versions]
 kotlin = "1.9.20"
 kotlinx-serialization = "1.6.3"
+dbus = "5.0.0"
 
 [libraries]
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+dbus-core = { module = "com.github.hypfvieh:dbus-java-core", version.ref = "dbus" }
+dbus-transport-jnr-unixsocket = { module = "com.github.hypfvieh:dbus-java-transport-jnr-unixsocket", version.ref = "dbus" }
 
 [bundles]
+dbus = [ "dbus-core", "dbus-transport-jnr-unixsocket" ]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
