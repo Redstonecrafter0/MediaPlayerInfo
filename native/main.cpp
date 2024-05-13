@@ -30,19 +30,25 @@ jobject Java_dev_redstones_mediaplayerinfo_impl_win_WindowsMediaPlayerInfo_getMe
         auto timeline = session.GetTimelineProperties();
         auto mediaProperties = session.TryGetMediaPropertiesAsync().get();
 
-        auto thumbnail = mediaProperties.Thumbnail().OpenReadAsync().get();
-        auto reader = DataReader(thumbnail.GetInputStreamAt(0));
-        reader.LoadAsync(thumbnail.Size()).get();
-        std::vector<uint8_t> buffer(thumbnail.Size());
-        auto bufferView = array_view<uint8_t>(buffer);
-        reader.ReadBytes(bufferView);
-        reader.Close();
-        thumbnail.Close();
+        auto thumbnail = mediaProperties.Thumbnail();
+        jbyteArray jArtwork;
+        if (thumbnail) {
+            auto thumbnailStream = thumbnail.OpenReadAsync().get();
+            auto reader = DataReader(thumbnailStream.GetInputStreamAt(0));
+            reader.LoadAsync(thumbnailStream.Size()).get();
+            std::vector<uint8_t> buffer(thumbnailStream.Size());
+            auto bufferView = array_view<uint8_t>(buffer);
+            reader.ReadBytes(bufferView);
+            reader.Close();
+            thumbnailStream.Close();
+            jArtwork = env->NewByteArray(static_cast<long>(buffer.size()));
+            env->SetByteArrayRegion(jArtwork, 0, static_cast<long>(buffer.size()),reinterpret_cast<const jbyte *>(buffer.data()));
+        } else {
+            jArtwork = env->NewByteArray(0);
+        }
 
         jstring jTitle = env->NewStringUTF(to_string(mediaProperties.Title()).c_str());
         jstring jArtist = env->NewStringUTF(to_string(mediaProperties.Artist()).c_str());
-        jbyteArray jArtwork = env->NewByteArray(static_cast<long>(buffer.size()));
-        env->SetByteArrayRegion(jArtwork, 0, static_cast<long>(buffer.size()), reinterpret_cast<const jbyte*>(buffer.data()));
         jlong jPosition;
         jboolean jPlaying = session.GetPlaybackInfo().PlaybackStatus() == GlobalSystemMediaTransportControlsSessionPlaybackStatus::Playing;
         if (jPlaying) {
