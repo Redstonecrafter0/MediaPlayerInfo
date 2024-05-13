@@ -17,9 +17,9 @@ jobject Java_dev_redstones_mediaplayerinfo_impl_win_WindowsMediaPlayerInfo_getMe
     jmethodID listConstructor = env->GetMethodID(listClass, "<init>", "()V");
     jmethodID listAdd = env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
     jclass mediaSessionClass = env->FindClass("Ldev/redstones/mediaplayerinfo/impl/win/WindowsMediaSession;");
-    jmethodID mediaSessionConstructor = env->GetMethodID(mediaSessionClass, "<init>","(Ldev/redstones/mediaplayerinfo/MediaInfo;Ljava/lang/String;I)V");
+    jmethodID mediaSessionConstructor = env->GetMethodID(mediaSessionClass, "<init>", "(Ldev/redstones/mediaplayerinfo/MediaInfo;Ljava/lang/String;I)V");
     jclass mediaInfoClass = env->FindClass("Ldev/redstones/mediaplayerinfo/MediaInfo;");
-    jmethodID mediaInfoConstructor = env->GetMethodID(mediaInfoClass, "<init>","(Ljava/lang/String;Ljava/lang/String;[BJJZ)V");
+    jmethodID mediaInfoConstructor = env->GetMethodID(mediaInfoClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;[BJJZ)V");
 
     jobject list = env->NewObject(listClass, listConstructor);
 
@@ -58,13 +58,14 @@ jobject Java_dev_redstones_mediaplayerinfo_impl_win_WindowsMediaPlayerInfo_getMe
         }
         jlong jDuration = std::chrono::duration_cast<std::chrono::seconds>(timeline.EndTime() - timeline.StartTime()).count();
 
-        jobject mediaInfo = env->NewObject(mediaInfoClass, mediaInfoConstructor, jTitle, jArtist, jArtwork,jPosition, jDuration, jPlaying);
+        jobject mediaInfo = env->NewObject(mediaInfoClass, mediaInfoConstructor, jTitle, jArtist, jArtwork, jPosition, jDuration, jPlaying);
 
         jstring jOwner = env->NewStringUTF(to_string(session.SourceAppUserModelId()).c_str());
 
-        jobject mediaSession = env->NewObject(mediaSessionClass, mediaSessionConstructor, mediaInfo, jOwner,i);
+        jobject mediaSession = env->NewObject(mediaSessionClass, mediaSessionConstructor, mediaInfo, jOwner, i);
         env->CallBooleanMethod(list, listAdd, mediaSession);
     }
+
     return list;
 }
 
@@ -144,7 +145,7 @@ int main() {
         reader.ReadBytes(bufferView);
         reader.Close();
         std::ofstream file("thumbnail.png", std::ios::out | std::ios::binary);
-        file.write(reinterpret_cast<char *>(buffer.data()), buffer.size());
+        file.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
         file.close();
         auto timeline = session.GetTimelineProperties();
         long long positionFrom = (std::chrono::duration_cast<std::chrono::milliseconds>(timeline.LastUpdatedTime().time_since_epoch()).count() - 11647238400000) / 1000;
