@@ -15,8 +15,15 @@ using namespace Windows::Storage::Streams;
 #define HANDLE_ASYNC_ERROR(operation) \
     try { \
         operation; \
-    } catch (const winrt::hresult_error& ex) { \
-        std::wcout << L"Error: " << ex.message().c_str() << std::endl; \
+    } catch (...) { \
+       std::exception_ptr ex = std::current_exception(); \
+        try { \
+            std::rethrow_exception(ex); \
+        } catch (const std::bad_exception& e) { \
+            std::wcerr << e.what() << std::endl; \
+        } catch (...) { \
+            std::cerr << "Unhandled exception" << std::endl; \
+        } \
     }
 
 jobject Java_dev_redstones_mediaplayerinfo_impl_win_WindowsMediaPlayerInfo_getMediaSessions(JNIEnv* env, jobject obj) {
