@@ -158,7 +158,8 @@ jobs:
               await github.rest.repos.updateRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                release_id: response.data.id
+                release_id: response.data.id,
+                draft: false
               });
             
               core.exportVariable('RELEASE_ID', response.data.id);
