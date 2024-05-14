@@ -4,7 +4,7 @@ on:
     branches:
       - master
 jobs:
-  staging:
+  nightly:
     uses: ./.github/workflows/build.yml
     with:
       build-command: publishMavenJavaPublicationToLocalRepository
