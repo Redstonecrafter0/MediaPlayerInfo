@@ -10,6 +10,9 @@ on:
       prerelease:
         type: string
         default: ''
+    secrets:
+      GPG_KEY:
+        required: true
 jobs:
   native:
     runs-on: windows-2019
