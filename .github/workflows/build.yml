@@ -142,7 +142,7 @@ jobs:
                 owner: context.repo.owner,
                 prerelease: ${{ inputs.prerelease != '' }},
                 repo: context.repo.repo,
-                tag_name: 'v${{ env.RELEASE_VERSION }}',
+                tag_name: 'v${{ env.RELEASE_VERSION }}'
               });
             
               for (const file of fs.readdirSync('build/libs')) {
@@ -154,16 +154,6 @@ jobs:
                   data: fs.readFileSync('build/libs/' + file)
                 });
               }
-            
-              await github.rest.repos.updateRelease({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: response.data.id,
-                draft: false
-              });
-            
-              core.exportVariable('RELEASE_ID', response.data.id);
-              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
             } catch (error) {
               core.setFailed(error.message);
             }
