@@ -9,3 +9,6 @@ jobs:
     with:
       build-command: publishMavenJavaPublicationToLocalRepository
       environment: 'development'
+    permissions:
+      packages: write
+      contents: write
