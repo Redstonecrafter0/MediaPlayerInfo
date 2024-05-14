@@ -15,21 +15,41 @@ MacOS is not supported as I don't have the hardware to test this. PRs are welcom
 
 ## Usage
 
+### Dependency
+
 To use MediaPlayerInfo in your project, you need to include it as a dependency.
 
 ```kotlin
 dependencies {
-    implementation("com.github.Redstonecrafter0:MediaPlayerInfo:VERSION")
+    implementation("dev.redstones.mediaplayerinfo:MediaPlayerInfo:VERSION")
 }
 ```
 
 ```groovy
 dependencies {
-    implementation 'com.github.Redstonecrafter0:MediaPlayerInfo:VERSION'
+    implementation 'dev.redstones.mediaplayerinfo:MediaPlayerInfo:VERSION'
 }
 ```
 
 Replace `VERSION` with the latest version of MediaPlayerInfo.
+
+#### Dev Builds
+
+In case you want to use a prerelease you must add the maven repo for it.
+
+```kotlin
+repositories {
+    maven("https://maven.pkg.github.com/Redstonecrafter0/MediaPlayerInfo")
+}
+```
+
+### Code
+```kotlin
+// print all current sessions current tracks
+MediaPlayerInfo.getMediaSessions().forEach { session ->
+    println(session.media)
+}
+```
 
 ## Documentation
 

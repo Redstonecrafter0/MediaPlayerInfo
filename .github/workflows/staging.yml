@@ -1,0 +1,16 @@
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: The prerelease suffix of the version like beta or rc1
+        required: true
+jobs:
+  staging:
+    uses: ./.github/workflows/build.yml
+    with:
+      build-command: publishMavenJavaPublicationToGitHubPackagesRepository
+      environment: 'staging'
+      prerelease: ${{ inputs.prerelease }}
+    permissions:
+      packages: write
+      contents: write
