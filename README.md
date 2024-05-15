@@ -37,6 +37,8 @@ Replace `VERSION` with the latest version of MediaPlayerInfo.
 
 In case you want to use a prerelease you must add the maven repo for it.
 
+> Remember that this requires authentication. Even for reading public packages. [GitHub Documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#authenticating-to-github-packages)
+
 ```kotlin
 repositories {
     maven("https://maven.pkg.github.com/Redstonecrafter0/MediaPlayerInfo")
