@@ -1,0 +1,15 @@
+on:
+  workflow_dispatch:
+jobs:
+  staging:
+    uses: ./.github/workflows/build.yml
+    with:
+      build-command: publishMavenJavaPublicationToOSSRHRepository
+      environment: 'production'
+    permissions:
+      packages: write
+      contents: write
+    secrets:
+      GPG_KEY: ${{ secrets.GPG_KEY }}
+      MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}

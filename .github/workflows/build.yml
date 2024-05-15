@@ -13,6 +13,8 @@ on:
     secrets:
       GPG_KEY:
         required: true
+      MAVEN_USERNAME:
+      MAVEN_PASSWORD:
 jobs:
   native:
     runs-on: windows-2019
