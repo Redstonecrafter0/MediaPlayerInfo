@@ -50,14 +50,6 @@ signing {
 publishing {
     repositories {
         maven {
-            name = "Central"
-            url = uri("https://central.sonatype.com/api/v1/publisher")
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
-            }
-        }
-        maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/Redstonecrafter0/MediaPlayerInfo")
             credentials {

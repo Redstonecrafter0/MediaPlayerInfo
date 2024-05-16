@@ -4,12 +4,11 @@ jobs:
   staging:
     uses: ./.github/workflows/build.yml
     with:
-      build-command: publishMavenJavaPublicationToCentralRepository
+      build-command: publishMavenJavaPublicationToLocalRepository
       environment: 'production'
     permissions:
       packages: write
       contents: write
     secrets:
       GPG_KEY: ${{ secrets.GPG_KEY }}
-      MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+      MAVEN_AUTH: ${{ secrets.MAVEN_AUTH }}

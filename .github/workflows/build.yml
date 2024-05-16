@@ -13,8 +13,7 @@ on:
     secrets:
       GPG_KEY:
         required: true
-      MAVEN_USERNAME:
-      MAVEN_PASSWORD:
+      MAVEN_AUTH:
 jobs:
   native:
     runs-on: windows-2019
@@ -78,8 +77,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
       GITHUB_ACTOR: ${{ github.GITHUB_ACTOR }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     needs:
@@ -126,6 +123,22 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: build/libs/*
+      - name: Create bundle.zip
+        if: inputs.environment == 'production'
+        run: |
+          cd build/repos/local
+          zip -r ../../../bundle.zip .
+          cd ../../..
+      - name: Upload to Maven Central Portal
+        if: inputs.environment == 'production'
+        run: |
+          curl --request POST \
+          --verbose \
+          --header "Authorization: Bearer $MAVEN_AUTH" \
+          --form bundle=@bundle.zip \
+          https://central.sonatype.com/api/v1/publisher/upload?publishingType=USER_MANAGED
+        env:
+          MAVEN_AUTH: ${{ secrets.MAVEN_AUTH }}
       - name: Get Gradle version
         if: inputs.environment != 'development'
         run: echo "RELEASE_VERSION=$(./gradlew -q getVersion)" >> $GITHUB_ENV
